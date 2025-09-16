@@ -1,7 +1,7 @@
 10 rem screen configuration
-20 poke 53280,13
-30 poke 53281,6
-40 print chr$(147);
+20 rem poke 53280,13
+30 rem poke 53281,6
+40 rem print chr$(147);
 50 open 15,8,15
 60 rem variable declarations
 70 dim f1%(42),f2%(42),m%(42,42)
