@@ -1,5 +1,5 @@
 10 rem ===== c128 basic 7.0 hopfield net (40col) =====
-20 poke 53280,13:poke 53281,6:print chr$(147);
+20 rem poke 53280,15:poke 53281,15:print chr$(147);
 30 rem arrays
 40 dim f1%(42),f2%(42),m%(42,42)
 50 dim v%,j,i
@@ -32,7 +32,7 @@
 320 gosub 970:print "fetch ";a$
 330 l%=0
 340 k=(k-64)*8+53248
-350 rem map char-rom in (clear bit 2 of $01), read 7 bytes
+350 rem map char-rom in, read 7 bytes
 360 poke 1,peek(1) and 251
 370 for i=0 to 6:poke 49408+i,peek(k+i):next
 380 poke 1,peek(1) or 4
@@ -68,33 +68,37 @@
 680 poke v,93:poke v+9,93
 690 next i
 700 return
-710 rem ------ render f1 -> left (actually f2 in orig label) ------
+710 rem ------ render f1 -> left ------
 750 l%=0
 760 for i=0 to 6
 770 v%=1024+40*(i+5)+6
 780 for j=2 to 7
 790 l%=l%+1
-800 if f1%(l%)=1 then poke v%+(8-j),81 else poke v%+(8-j),32
-810 next j
-820 next i
-830 return
-840 rem ------ render f2 -> right (as in original) ------
-860 l%=0
-870 for i=0 to 6
-880 v%=1024+40*(i+5)+26
-890 for j=2 to 7
-900 l%=l%+1
-910 if f2%(l%)=1 then poke v%+(8-j),81 else poke v%+(8-j),32
-920 next j
-930 next i
-940 return
-950 rem ------ status line pos ------
+800 if f1%(l%)=1 then poke v%+(8-j),81:goto 820
+810 poke v%+(8-j),32
+820 next j
+830 next i
+840 rem end render f1
+850 return
+860 rem ------ render f2 -> right ------
+870 l%=0
+880 for i=0 to 6
+890 v%=1024+40*(i+5)+26
+900 for j=2 to 7
+910 l%=l%+1
+920 if f2%(l%)=1 then poke v%+(8-j),81:goto 940
+930 poke v%+(8-j),32
+940 next j
+950 rem end render f2
+960 next i
+970 return
+980 rem ------ status line pos ------
 970 print chr$(19);:for i=1 to 21:print chr$(17);:next i:return
 990 rem ------ train (hebb) ------
 1000 gosub 970:print "training"
 1010 for i=1 to 42
 1020 for j=1 to 42
-1030 if i=j then m%(i,j)=m%(i,j) else m%(i,j)=m%(i,j)+f1%(i)*f1%(j)
+1030 if i<>j then m%(i,j)=m%(i,j)+f1%(i)*f1%(j)
 1040 next j
 1050 next i
 1060 return
@@ -102,14 +106,15 @@
 1080 print chr$(147);
 1090 for i=1 to 24
 1100 for j=1 to 39
-1110 if m%(i,j)<0 then print chr$(150); else print chr$(154);
-1120 print chr$(asc("0")+abs(m%(i,j)));
-1130 next j:print
-1140 next i
-1150 print chr$(154);"press any key to continue:";
-1160 get a$:if a$="" then 1160
-1170 return
-1180 rem ------ randomize ~10% bits ------
+1110 if m%(i,j)<0 then print chr$(150);:goto 1130
+1120 print chr$(154);
+1130 print chr$(asc("0")+abs(m%(i,j)));
+1140 next j:print
+1150 next i
+1160 print chr$(154);"press any key to continue:";
+1170 get a$:if a$="" then 1170
+1180 return
+1190 rem ------ randomize ~10% bits ------
 1210 gosub 970:print "random"
 1220 for i=1 to 42
 1230 if rnd(0)>0.1 then 1250
