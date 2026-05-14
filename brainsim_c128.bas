@@ -1,5 +1,5 @@
 10 rem c128: 40 spalten, f-tasten, bank fuer charset, recall integer wie c64
-20 rem optional: color 4,13 : color 0,6
+20 rem 
 30 rem
 50 open15,8,15
 51 rem f-tasten wie c64 (je ein byte)
@@ -18,7 +18,7 @@
 87 if (peek(215)and128) then sys49194:rem 80->40
 88 bank 15
 90 rem bildschirm
-100 scnclr
+100 scnclr:color 5,6:print chr$(146);
 110 print "    neuron network associative memory"
 120 print
 130 for i=1 to 12:print chr$(17);:next i
@@ -127,7 +127,7 @@
 1150 next j
 1160 print
 1170 next i
-1180 print chr$(154);"press any key to continue:";
+1180 print chr$(146);chr$(153);"press any key to continue:";
 1190 get a$:if a$="" goto 1190
 1200 return
 1210 rem zufaellig 10%
