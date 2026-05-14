@@ -64,7 +64,7 @@
 530 if j%=2 then gosub1210:goto 280
 540 if j%=6 then gosub1680:goto 280
 550 if j%=3 then gosub1290:goto 280
-560 if j%=7 then key restore:scnclr:close15:end
+560 if j%=7 then scnclr:close15:end
 570 if j%=4 then gosub1800:goto 90
 580 if j%=8 then gosub1990:goto 90
 590 goto 280
